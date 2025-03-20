@@ -8,6 +8,8 @@ class DrinkOrder:
     def age_verification():
         #Test for age requirements here, build on it later
         if customer.age < drinks.age_requirement:
+            print("Can't Drink")
             raise ValueError("Not Old Enough For Alcohol")
-        return 
+        else:
+            print("Party On!")
 
