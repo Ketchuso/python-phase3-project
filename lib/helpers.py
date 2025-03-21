@@ -6,12 +6,13 @@ from debug import Madison
 from debug import Johnathan
 
 def age_checker():
-    if Johnathan.age > 21:
-        print("Can Drink")
+    if Jay.age > 21:
+        print("\nWelcome in!")
     else:
-        print("Sorry gotta go")
+        print("\nSorry gotta go!")
         exit()
 
+
 def exit_program():
-    print("Goodbye!")
+    print("\n See ya later!")
     exit()
