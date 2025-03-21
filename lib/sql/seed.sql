@@ -1,4 +1,4 @@
-DELETE FROM drinks;
+ DELETE FROM drinks;
 DELETE FROM customer;
 
 
