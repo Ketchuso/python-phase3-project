@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # lib/debug.py
-import ipdb
+#import ipdb
 from models.Customer import Customer
 from models.Drinks import Drinks
 from models.Drink_Orders import DrinkOrder
@@ -19,4 +19,4 @@ Johnathan = Customer(name="Johnathan", age=18)
 
 Customer.delete_all()
 Drinks.delete_all()
-ipdb.set_trace()
+#ipdb.set_trace()
