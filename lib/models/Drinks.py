@@ -1,6 +1,7 @@
 from models.__init__ import CONN, CURSOR
 import ipdb
 
+
 class Drinks():
     age_requirement = 21
 
@@ -27,7 +28,7 @@ class Drinks():
         if not isinstance(value, str):
             raise TypeError("Name has to be a string")
         self._name = value
-        
+
     def save(self):
         sql = """
             INSERT INTO drinks (name)
