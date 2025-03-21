@@ -1,3 +1,6 @@
+from models.__init__ import CONN, CURSOR
+import ipdb
+
 class Customer():
     def __init__(self, name, age):
         #self.id = id
@@ -37,3 +40,98 @@ class Customer():
         if 1 <= value >= 122:
             raise ValueError("Enter a valid age")
         self._age = value
+
+    def save(self):
+        sql = """
+            INSERT INTO customer (name, age)
+            VALUES (?, ?);
+        """
+        
+        CURSOR.execute(sql, (self.name, self.age))
+        CONN.commit()
+    
+        self.id = CURSOR.lastrowid
+
+    def update(self):
+        sql = """
+            UPDATE customer
+            SET name = ?, age = ?
+            WHERE id = ?;
+        """
+        CURSOR.execute(sql, (self.name, self.age, self.id))
+        CONN.commit()
+
+    def delete(self):
+        sql = """
+            DELETE FROM customer
+            WHERE id = ?;
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        self.id = None
+        
+
+    @classmethod
+    def instance_from_row(cls, row):
+        return cls(name=row[1], age=row[2], id=row[0])
+
+    @classmethod
+    def all(cls):
+        sql = """
+            SELECT * FROM customer;
+        """
+
+        customer_rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_row(row) for row in customer_rows]
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT * FROM customer
+            WHERE id = ?;
+        """
+
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        if row:
+            return cls.instance_from_row(row)
+        else:
+            return None
+
+    @classmethod
+    def create(cls, name, age):
+        new_customer = cls(name=name, age=age)
+        new_customer.save()
+        return new_customer
+
+    @classmethod
+    def delete_all(cls):
+        sql = """
+            DELETE FROM customer;
+        """
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS customer (
+               id INTEGER PRIMARY KEY,
+               name TEXT,
+               age INTEGER
+            );
+        """
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = "DROP TABLE IF EXISTS customer;"
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    def __repr__(self):
+        return f'<customer id={self.id} name={self.name} >'
