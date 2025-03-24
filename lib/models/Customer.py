@@ -67,9 +67,12 @@ class Customer():
             WHERE id = ?;
         """
 
+        print("I was called")
+
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
         self.id = None
+
         
 
     @classmethod
