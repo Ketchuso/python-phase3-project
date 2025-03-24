@@ -16,6 +16,13 @@ Kerissa = Customer(name="Kerissa", age=33)
 Madison = Customer(name="Madison", age=20)
 Johnathan = Customer(name="Johnathan", age=18)
 
+Cosmo = Drinks(name="Cosmo")
+Manhattan = Drinks(name="Manhattan")
+Tequila_Sunrise = Drinks(name="Tequila Sunrise")
+Rum_Runner = Drinks(name="Rum Runner")
+Bees_Knees = Drinks(name="Bees Knees")
+
+
 
 Customer.delete_all()
 Drinks.delete_all()
