@@ -5,14 +5,18 @@ from debug import Kerissa
 from debug import Madison
 from debug import Johnathan
 
+from colorama import Fore, Style, init
+
+init()
+
 def age_checker():
     if Jay.age > 21:
-        print("\nWelcome in!")
+        print(Fore.GREEN + "\nWelcome in!" + Style.RESET_ALL)
     else:
-        print("\nSorry gotta go!")
+        print(Fore.RED + "\nSorry gotta go!" + Style.RESET_ALL)
         exit()
 
 
 def exit_program():
-    print("\n See ya later!")
+    print(Fore.GREEN + "\n See ya later!" + Style.RESET_ALL)
     exit()
