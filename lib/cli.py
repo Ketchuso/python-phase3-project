@@ -16,6 +16,7 @@ tab_open = False
 if not os.path.exists("company.db"):
     import seed
 
+count = 0
 def main():
     customer = None
     while True:
@@ -45,28 +46,54 @@ def enter_bar(customer):
     elif choice == "2":
         exit_program(customer)
 
-        
-
 #main option select
 def option_select(customer):
-    print(Style.BRIGHT + Fore.CYAN + "\nOptions" + Style.RESET_ALL)
+    global count
+    emotion_state()
+    if count <= 6:
+        print(Style.BRIGHT + Fore.CYAN + "Options" + Style.RESET_ALL)
+    else:
+        print(Style.BRIGHT + Fore.CYAN + "\nCut Off" + Style.RESET_ALL)
     #change later to only show if tab is open
-    print("1. Can I get a drink?")
-    if (tab_open):
+    if count <= 6:
+        print("1. Can I get a drink?")
+    else:
+        print("Nope, no more")
+    if tab_open:
         print(Fore.RED + "2. Close Your Tab" + Style.RESET_ALL)
         print(Fore.CYAN + "\nhint: to leave, close your tab" + Style.RESET_ALL)
     else:
         print(Fore.RED + "2. Leave" + Style.RESET_ALL)
 
-    choice = get_valid_choice(["1", "2"])
-    if choice == "1":
-        select_drink(customer)
-    elif choice == "2":
+    if count <= 6:
+        choice = get_valid_choice(["1", "2"])
+    else:
+        choice = get_valid_choice(["2"])
+
+    if count <= 6:
+        if choice == "1":
+            select_drink(customer)
+
+    if choice == "2":
         if (tab_open):
             close_tab(customer)
         else:
             leave(customer)
 
+def emotion_state():
+    global count
+    states = {
+        0: Fore.GREEN + Style.BRIGHT + "\n<(￣︶￣)>\n" + Style.RESET_ALL,
+        1: Fore.GREEN + Style.BRIGHT + "\n(๑>ᴗ<๑)\n" + Style.RESET_ALL,
+        2: Fore.GREEN + Style.BRIGHT + "\n(ﾉ> ◇ <)ﾉ\n" + Style.RESET_ALL,
+        3: Fore.GREEN + Style.BRIGHT + "\n┗(＾0＾)┓\n" + Style.RESET_ALL,
+        4: Fore.GREEN + Style.BRIGHT + "\n─=≡Σ((( つ•̀ω•́)つ\n" + Style.RESET_ALL,
+        5: Fore.RED + Style.BRIGHT + "\nヾ(￣□￣;)ﾉ\n" + Style.RESET_ALL,
+        6: Fore.RED + Style.BRIGHT + "\n(╯°□°）╯︵ ┻━┻" + Style.RESET_ALL
+    }
+    print(states[count])
+    count += 1
+    
 #drink selection options
 def select_drink(customer):
     print(Style.BRIGHT + Fore.CYAN + "\n Options:" + Style.RESET_ALL)
