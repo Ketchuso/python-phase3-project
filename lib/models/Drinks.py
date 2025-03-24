@@ -1,11 +1,12 @@
 from models.__init__ import CONN, CURSOR
 import ipdb
 
+
 class Drinks():
     age_requirement = 21
 
-    def __init__(self, id, name):
-        self.id = id
+    def __init__(self, name):
+        # self.id = id
         self.name = name
     
     @property
@@ -27,7 +28,7 @@ class Drinks():
         if not isinstance(value, str):
             raise TypeError("Name has to be a string")
         self._name = value
-        
+
     def save(self):
         sql = """
             INSERT INTO drinks (name)
@@ -119,5 +120,5 @@ class Drinks():
         CONN.commit()
 
     def __repr__(self):
-        return f'<Drinks id={self.id} name={self.name} >'
+        return f'<drinks id={self.id} name={self.name} >'
         
