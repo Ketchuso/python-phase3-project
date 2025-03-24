@@ -13,7 +13,6 @@ init()
 def customer_name():
     while True:
         name = input("Enter name (1-10 characters): ").strip()
-        print(f"Raw input: {repr(name)}") 
         try:
             customer = Customer(name=name, age=25)
             return customer
@@ -32,8 +31,8 @@ def customer_age(customer):
             print(Fore.RED + str(e) + Style.RESET_ALL)
             print(Fore.CYAN + "Please enter a valid age." + Style.RESET_ALL)
 
-def age_checker():
-    if Jay.age > 21:
+def age_checker(customer):
+    if customer.age > 21:
         print(Fore.GREEN + "\nWelcome in!" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nSorry gotta go!" + Style.RESET_ALL)

@@ -21,7 +21,7 @@ class Customer():
     def name(self):
         return self._name
 
-    @id.setter
+    @name.setter
     def name(self, value):
         if not isinstance(value, str):
             raise TypeError("Name has to be a string")
@@ -134,4 +134,4 @@ class Customer():
         CONN.commit()
 
     def __repr__(self):
-        return f'<customer id={self.id} name={self.name} >'
+        return f'<customer id={self.id} name={self.name} age={self.age}>'

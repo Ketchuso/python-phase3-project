@@ -36,6 +36,8 @@ def enter_bar():
     if choice == "1":
         customer = customer_name()
         customer_age(customer)
+        age_checker(customer)
+
 
     elif choice == "2":
         exit_program()
