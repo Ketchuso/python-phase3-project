@@ -2,8 +2,11 @@
 from colorama import Fore, Style, init
 from helpers import (
     exit_program,
-    age_checker
+    age_checker,
+    customer_name,
+    customer_age
 )
+from models.Customer import Customer
 
 init()
 
@@ -31,7 +34,11 @@ def enter_bar():
 
     choice = get_valid_choice(["1", "2"])
     if choice == "1":
-        age_checker()
+        customer = customer_name()
+        customer_age(customer)
+        age_checker(customer)
+
+
     elif choice == "2":
         exit_program()
         

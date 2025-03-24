@@ -3,7 +3,7 @@
 #import ipdb
 from models.Customer import Customer
 from models.Drinks import Drinks
-from models.Drink_Orders import DrinkOrder
+from models.Drink_Orders import Drink_Orders
 
 from models.__init__ import CONN, CURSOR
 
