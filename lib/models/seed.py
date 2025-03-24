@@ -9,6 +9,7 @@ cursor = conn.cursor()
 # Drop the tables if they exist
 cursor.execute('DROP TABLE IF EXISTS customer')
 cursor.execute('DROP TABLE IF EXISTS drinks')
+cursor.execute('DROP TABLE IF EXISTS drink_orders')
 
 # Create tables
 cursor.execute('''
@@ -23,6 +24,20 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS drinks (
     id INTEGER PRIMARY KEY,
     name TEXT
+)
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS drink_orders (
+    customer_name TEXT,
+    customer_id INTEGER,
+    drink_name TEXT,
+    drink_id INTEGER,
+    PRIMARY KEY (customer_name, customer_id, drink_name, drink_id),
+    FOREIGN KEY (customer_name) REFERENCES customer(name),
+    FOREIGN KEY (customer_id) REFERENCES customer(id),
+    FOREIGN KEY (drink_name) REFERENCES drink(name),
+    FOREIGN KEY (drink_id) REFERENCES drinks(id)
 )
 ''')
 
@@ -44,6 +59,16 @@ def seed_db():
         ('Bees Knees',)
     ]
 
+    drink_orders = [
+    ('Jay', 1, 'Cosmo', 1)  # Jay ordered Cosmo
+    # (1, 3),  # Jay ordered Tequila Sunrise
+    # (2, 2),  # Victoria ordered Manhattan
+    # (3, 5),  # Kerissa ordered Bees Knees
+    # (4, 4),  # Madison ordered Rum Runner
+    # (5, 1),  # Johnathan ordered Cosmo
+    # (5, 2)   # Johnathan ordered Manhattan
+]
+
     # Insert sample customers into the database
     cursor.executemany('''
     INSERT INTO customer (name, age)
@@ -55,12 +80,18 @@ def seed_db():
     INSERT INTO drinks (name)
     VALUES (?)
     ''', drinks)
+
+    cursor.executemany('''
+    INSERT INTO drink_orders (customer_name, customer_id, drink_name, drink_id)
+    VALUES (?, ?, ?, ?)
+    ''', drink_orders)
     
     # Commit the transaction
     conn.commit()
 
     print(f"{len(customers)} customers added to the database.")
     print(f"{len(drinks)} drinks added to the database.")
+    print(f"{len(customers)} customers, {len(drinks)} drinks, and {len(drink_orders)} drink-orders associations were added to the database.")
 
 # Run the seed function
 if __name__ == "__main__":
