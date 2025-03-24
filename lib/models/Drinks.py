@@ -5,8 +5,8 @@ import ipdb
 class Drinks():
     age_requirement = 21
 
-    def __init__(self, id, name):
-        self.id = id
+    def __init__(self, name):
+        # self.id = id
         self.name = name
     
     @property
@@ -120,5 +120,5 @@ class Drinks():
         CONN.commit()
 
     def __repr__(self):
-        return f'<Drinks id={self.id} name={self.name} >'
+        return f'<drinks id={self.id} name={self.name} >'
         
