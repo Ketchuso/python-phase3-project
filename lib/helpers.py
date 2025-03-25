@@ -35,12 +35,16 @@ def age_checker(customer):
     if customer.age >= 21:
         print(Fore.GREEN + "\nWelcome in!" + Style.RESET_ALL)
     else:
+        delete_customer(customer)
         print(Fore.RED + "\nSorry gotta go!" + Style.RESET_ALL)
         exit()
 
 
 def exit_program(customer):
-    if customer:
-        customer.delete()
+    delete_customer(customer)
     print(Fore.GREEN + "\n See ya later!" + Style.RESET_ALL)
     exit()
+
+def delete_customer(customer):
+    if customer:
+        customer.delete()
