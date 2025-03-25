@@ -33,10 +33,11 @@ CREATE TABLE IF NOT EXISTS drink_orders (
     customer_id INTEGER,
     drink_name TEXT,
     drink_id INTEGER,
+    quantity INTEGER DEFAULT 1,
     PRIMARY KEY (customer_name, customer_id, drink_name, drink_id),
     FOREIGN KEY (customer_name) REFERENCES customer(name),
     FOREIGN KEY (customer_id) REFERENCES customer(id),
-    FOREIGN KEY (drink_name) REFERENCES drink(name),
+    FOREIGN KEY (drink_name) REFERENCES drinks(name),
     FOREIGN KEY (drink_id) REFERENCES drinks(id)
 )
 ''')
@@ -61,12 +62,7 @@ def seed_db():
 
     drink_orders = [
     ('Jay', 1, 'Cosmo', 1)  # Jay ordered Cosmo
-    # (1, 3),  # Jay ordered Tequila Sunrise
-    # (2, 2),  # Victoria ordered Manhattan
-    # (3, 5),  # Kerissa ordered Bees Knees
-    # (4, 4),  # Madison ordered Rum Runner
-    # (5, 1),  # Johnathan ordered Cosmo
-    # (5, 2)   # Johnathan ordered Manhattan
+   
 ]
 
     # Insert sample customers into the database
