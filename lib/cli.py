@@ -7,6 +7,7 @@ from helpers import (
     customer_age
 )
 from models.Customer import Customer
+from models.Drink_Orders import Drink_Orders
 import os
 
 init()
@@ -141,7 +142,11 @@ def view_tab(customer):
     select_tab(choice, customer)
 
 def select_tab(choice, customer):
-    print(choice)
+    customer_drinks = Drink_Orders.find_by_id(choice)
+    print(customer_drinks)
+
+    print(Fore.CYAN + "\nPress enter to continue" + Style.RESET_ALL)
+    user_input = input()
     option_select(customer)
 
 def open_tab(customer):
