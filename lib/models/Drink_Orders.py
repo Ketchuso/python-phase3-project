@@ -21,6 +21,10 @@ class Drink_Orders():
         CURSOR.execute(sql)
         CONN.commit()
 
+    # @classmethod
+    # def instance_from_row(cls, row):
+    #     return cls(name=row[1], age=row[2], id=row[0])
+
     @classmethod
     def find_by_id(cls, id):
         sql = """

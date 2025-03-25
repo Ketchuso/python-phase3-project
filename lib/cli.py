@@ -7,16 +7,18 @@ from helpers import (
     customer_age
 )
 from models.Customer import Customer
+from models.Drink_Orders import Drink_Orders
 import os
 
 init()
 
 tab_open = False
+birthday = False
+birthday_toggle = False
+drink_count = 0
 
 if not os.path.exists("company.db"):
     import seed
-
-count = 0
 def main():
     customer = None
     while True:
@@ -48,14 +50,15 @@ def enter_bar(customer):
 
 #main option select
 def option_select(customer):
-    global count
+    global drink_count
+    global birthday
     emotion_state()
-    if count <= 6:
+    if drink_count <= 6:
         print(Style.BRIGHT + Fore.CYAN + "Options" + Style.RESET_ALL)
     else:
         print(Style.BRIGHT + Fore.CYAN + "\nCut Off" + Style.RESET_ALL)
     #change later to only show if tab is open
-    if count <= 6:
+    if drink_count <= 6:
         print("1. Can I get a drink?")
     else:
         print("Nope, no more")
@@ -63,45 +66,88 @@ def option_select(customer):
     print("2. View Open Tabs")
 
     if tab_open:
-        print(Fore.RED + "3. Close Your Tab" + Style.RESET_ALL)
+        if not birthday:
+            print("3. It's my birthday!")
+            print(Fore.RED + "4. Close Your Tab" + Style.RESET_ALL)
+        else:
+            print(Fore.RED + "3. Close Your Tab" + Style.RESET_ALL)
         print(Fore.CYAN + "\nhint: to leave, close your tab" + Style.RESET_ALL)
     else:
-        print(Fore.RED + "3. Leave" + Style.RESET_ALL)
+        if not birthday:
+            print("3. It's my birthday!")
+            print(Fore.RED + "4. Leave" + Style.RESET_ALL)
+        else:
+            print(Fore.RED + "3. Leave" + Style.RESET_ALL)
+    
+    if drink_count <= 6 and not birthday:
+        choice = get_valid_choice(["1", "2", "3", "4"])
+    elif not birthday:
+        choice = get_valid_choice(["2", "3", "4"])
 
-    if count <= 6:
+    if drink_count <= 6 and birthday:
         choice = get_valid_choice(["1", "2", "3"])
-    else:
-        choice = get_valid_choice(["2, 3"])
+    elif birthday:
+        choice = get_valid_choice(["2", "3"])
 
-    if count <= 6:
+    if drink_count <= 6:
         if choice == "1":
             select_drink(customer)
         
     if choice == "2":
         view_tab(customer)
-    
-    elif choice == "3":
+    elif choice == "3" and birthday:
         if (tab_open):
             close_tab(customer)
         else:
             leave(customer)
 
+    elif choice == "3":
+        update_birthday(customer)
+    elif choice == "4" and not birthday:
+        if (tab_open):
+            close_tab(customer)
+        else:
+            leave(customer)
+
+def update_birthday(customer):
+    global birthday, birthday_toggle
+
+    birthday = True
+    birthday_toggle = True
+    
+
+    customer.age += 1
+    customer.update()
+
+    option_select(customer)
+
+
+def rainbow_text(text):
+    colors = [Fore.RED, Fore.YELLOW, Fore.GREEN, Fore.CYAN, Fore.BLUE, Fore.MAGENTA]
+    return "".join(colors[i % len(colors)] + char for i, char in enumerate(text)) + Style.RESET_ALL
+
 def emotion_state():
-    global count
-    states = {
-        0: Fore.GREEN + Style.BRIGHT + "\n<(￣︶￣)>\n" + Style.RESET_ALL,
-        1: Fore.GREEN + Style.BRIGHT + "\n(๑>ᴗ<๑)\n" + Style.RESET_ALL,
-        2: Fore.GREEN + Style.BRIGHT + "\n(ﾉ> ◇ <)ﾉ\n" + Style.RESET_ALL,
-        3: Fore.GREEN + Style.BRIGHT + "\n┗(＾0＾)┓\n" + Style.RESET_ALL,
-        4: Fore.GREEN + Style.BRIGHT + "\n─=≡Σ((( つ•̀ω•́)つ\n" + Style.RESET_ALL,
-        5: Fore.RED + Style.BRIGHT + "\nヾ(￣□￣;)ﾉ\n" + Style.RESET_ALL,
-        6: Fore.RED + Style.BRIGHT + "\n(╯°□°）╯︵ ┻━┻" + Style.RESET_ALL
-    }
-    print(states[count])
-    count += 1
+    global birthday_toggle
+
+    if birthday_toggle:
+        print(Style.BRIGHT + "\n" + rainbow_text("HAPPY BIRTHDAY!!!"))
+        print(Fore.GREEN + Style.BRIGHT + "(☞ﾟヮﾟ)☞\n" + Style.RESET_ALL)
+        birthday_toggle = False
+    else:
+        states = {
+            0: Fore.RED + Style.BRIGHT + "\n<" + "(￣︶￣)>\n" + Style.RESET_ALL,
+            1: Fore.GREEN + Style.BRIGHT + "\n(๑>ᴗ<๑)\n" + Style.RESET_ALL,
+            2: Fore.GREEN + Style.BRIGHT + "\n(ﾉ> ◇ <)ﾉ\n" + Style.RESET_ALL,
+            3: Fore.GREEN + Style.BRIGHT + "\n┗(＾0＾)┓\n" + Style.RESET_ALL,
+            4: Fore.GREEN + Style.BRIGHT + "\n─=≡Σ((( つ•̀ω•́)つ\n" + Style.RESET_ALL,
+            5: Fore.RED + Style.BRIGHT + "\nヾ(￣□￣;)ﾉ\n" + Style.RESET_ALL,
+            6: Fore.RED + Style.BRIGHT + "\n(╯°□°）╯︵ ┻━┻" + Style.RESET_ALL
+        }
+        print(states[drink_count])
     
 #drink selection options
 def select_drink(customer):
+    global drink_count
     print(Style.BRIGHT + Fore.CYAN + "\n Options:" + Style.RESET_ALL)
     print("1. Cosmo")
     print("2. Manhattan")
@@ -114,6 +160,7 @@ def select_drink(customer):
     if choice == "6":
         option_select(customer)
     else:
+        drink_count += 1
         drinks = {
             "1": "Cosmo",
             "2": "Manhattan",
@@ -141,7 +188,11 @@ def view_tab(customer):
     select_tab(choice, customer)
 
 def select_tab(choice, customer):
-    print(choice)
+    customer_drinks = Drink_Orders.find_by_id(choice)
+    print(customer_drinks)
+
+    print(Fore.CYAN + "\nPress enter to continue" + Style.RESET_ALL)
+    user_input = input()
     option_select(customer)
 
 def open_tab(customer):
