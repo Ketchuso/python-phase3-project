@@ -48,8 +48,8 @@ def seed_db():
         ('Jay', 23),
         ('Victoria', 25),
         ('Kerissa', 33),
-        ('Madison', 20),
-        ('Johnathan', 18)
+        ('Madison', 23),
+        ('Johnathan', 21)
     ]
     drinks = [
         ('Cosmo',),
