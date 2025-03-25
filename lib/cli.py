@@ -21,7 +21,6 @@ def main():
     customer = None
     while True:
         enter_bar(customer)
-        option_select(customer)
         
 #verifies valid choice
 def get_valid_choice(valid_options):
@@ -43,6 +42,7 @@ def enter_bar(customer):
         customer = customer_name()  # Re-assign the customer object returned by customer_name()
         customer_age(customer)
         age_checker(customer)
+        option_select(customer)
     elif choice == "2":
         exit_program(customer)
 

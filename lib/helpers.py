@@ -40,9 +40,7 @@ def age_checker(customer):
 
 
 def exit_program(customer):
-    print("called")
     if customer:
-        print("Deleting")
         customer.delete()
     print(Fore.GREEN + "\n See ya later!" + Style.RESET_ALL)
     exit()
