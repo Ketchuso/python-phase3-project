@@ -1,9 +1,9 @@
 # lib/helpers.py
-from debug import Jay
-from debug import Victoria
-from debug import Kerissa
-from debug import Madison
-from debug import Johnathan
+# from debug import Jay
+# from debug import Victoria
+# from debug import Kerissa
+# from debug import Madison
+# from debug import Johnathan
 
 from colorama import Fore, Style, init
 from models.Customer import Customer
@@ -32,13 +32,15 @@ def customer_age(customer):
             print(Fore.CYAN + "Please enter a valid age." + Style.RESET_ALL)
 
 def age_checker(customer):
-    if customer.age > 21:
+    if customer.age >= 21:
         print(Fore.GREEN + "\nWelcome in!" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nSorry gotta go!" + Style.RESET_ALL)
         exit()
 
 
-def exit_program():
+def exit_program(customer):
+    if customer:
+        customer.delete()
     print(Fore.GREEN + "\n See ya later!" + Style.RESET_ALL)
     exit()

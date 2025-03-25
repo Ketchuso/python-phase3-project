@@ -11,12 +11,6 @@ class Customer():
     def id(self):
         return self._id
     
-    @id.setter
-    def id(self, value):
-        if not isinstance(value, int):
-            raise TypeError("ID has to be an Int")
-        self._id = value
-    
     @property
     def name(self):
         return self._name
@@ -50,7 +44,7 @@ class Customer():
         CURSOR.execute(sql, (self.name, self.age))
         CONN.commit()
     
-        self.id = CURSOR.lastrowid
+        self._id = CURSOR.lastrowid
 
     def update(self):
         sql = """
@@ -67,9 +61,12 @@ class Customer():
             WHERE id = ?;
         """
 
+        print("I was called")
+
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        self.id = None
+        self._id = None
+
         
 
     @classmethod
