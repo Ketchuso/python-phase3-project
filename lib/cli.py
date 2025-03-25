@@ -8,6 +8,7 @@ from helpers import (
 )
 from models.Customer import Customer
 from models.Drink_Orders import Drink_Orders
+from models.Drinks import Drinks
 import os
 
 init()
@@ -135,7 +136,7 @@ def emotion_state():
         birthday_toggle = False
     else:
         states = {
-            0: Fore.RED + Style.BRIGHT + "\n<" + "(￣︶￣)>\n" + Style.RESET_ALL,
+            0: Fore.GREEN + Style.BRIGHT + "\n<" + "(￣︶￣)>\n" + Style.RESET_ALL,
             1: Fore.GREEN + Style.BRIGHT + "\n(๑>ᴗ<๑)\n" + Style.RESET_ALL,
             2: Fore.GREEN + Style.BRIGHT + "\n(ﾉ> ◇ <)ﾉ\n" + Style.RESET_ALL,
             3: Fore.GREEN + Style.BRIGHT + "\n┗(＾0＾)┓\n" + Style.RESET_ALL,
@@ -144,40 +145,43 @@ def emotion_state():
             6: Fore.RED + Style.BRIGHT + "\n(╯°□°）╯︵ ┻━┻" + Style.RESET_ALL
         }
         print(states[drink_count])
-    
-#drink selection options
+
 def select_drink(customer):
     global drink_count
-    print(Style.BRIGHT + Fore.CYAN + "\n Options:" + Style.RESET_ALL)
-    print("1. Cosmo")
-    print("2. Manhattan")
-    print("3. Tequila Sunrise")
-    print("4. Rum Runner")
-    print("5. Bees Knees")
-    print(Fore.RED + "6. Go Back" + Style.RESET_ALL)
 
-    choice = get_valid_choice(["1", "2", "3", "4", "5", "6"])
-    if choice == "6":
-        option_select(customer)
+    print(Style.BRIGHT + Fore.CYAN + "\nOptions:" + Style.RESET_ALL)
+    drinks_list = Drinks.get_all()
+    print(Fore.GREEN + "Please select drink number:" + Style.RESET_ALL)
+
+    ids = []  
+    for i, drink in enumerate(drinks_list):
+        print(f"{i + 1}. {drink.name}")  
+        ids.append(str(i + 1))  
+
+    print(f"{Fore.RED}{len(drinks_list) + 1}. Go Back {Style.RESET_ALL}")
+    ids.append(str(len(drinks_list) + 1)) 
+
+    
+    choice = get_valid_choice(ids)
+    choice = int(choice) 
+    
+    if choice == (len(drinks_list) + 1):
+        option_select(customer)  
     else:
         drink_count += 1
-        drinks = {
-            "1": "Cosmo",
-            "2": "Manhattan",
-            "3": "Tequila Sunrise",
-            "4": "Rum Runner",
-            "5": "Bees Knees"
-        }
-    print(Fore.GREEN + f"\n{drinks[choice]}, right up!" + Style.RESET_ALL)
+        drink_index = (choice) - 1  
+        selected_drink = drinks_list[drink_index]
+        print(Fore.GREEN + f"\n{selected_drink}, right up!" + Style.RESET_ALL)
+        Drink_Orders.create_order(customer.name, customer.id, selected_drink.name, choice)
 
-    if tab_open:
-        add_to_tab(drinks, choice, customer)
-    else:
-        open_tab(customer)
-        
+        if tab_open:
+            add_to_tab(drinks_list, drink_index, customer)  
+        else:
+            open_tab(customer)
+
 def view_tab(customer):
     customer_list = customer.get_all()
-    print(Fore.GREEN + "Please select tab Number:" + Style.RESET_ALL)
+    print(Fore.GREEN + "Please select tab number:" + Style.RESET_ALL)
     ids = []
     for i in customer_list:
         print(f"{i.id}. {i.name}", end=" | ")
@@ -188,12 +192,16 @@ def view_tab(customer):
     select_tab(choice, customer)
 
 def select_tab(choice, customer):
-    customer_drinks = Drink_Orders.find_by_id(choice)
-    print(customer_drinks)
-
+    customer = Customer.find_by_id(choice)
+    if customer:
+        customer_drinks = Drink_Orders.find_by_customer(customer.id)
+        print(customer_drinks)
+    else:
+        print("Customer not found.")
     print(Fore.CYAN + "\nPress enter to continue" + Style.RESET_ALL)
     user_input = input()
     option_select(customer)
+
 
 def open_tab(customer):
     global tab_open
