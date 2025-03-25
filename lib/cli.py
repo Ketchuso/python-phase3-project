@@ -7,14 +7,20 @@ from helpers import (
     customer_age
 )
 from models.Customer import Customer
+from models.Drink_Orders import Drink_Orders
 import os
+import subprocess
+
+def run_seed():
+    subprocess.run(["python", "lib/models/seed.py"])
+run_seed()
 
 init()
 
 tab_open = False
 
-if not os.path.exists("company.db"):
-    import seed
+# if not os.path.exists("company.db"):
+    # import seed
 
 count = 0
 def main():
@@ -163,6 +169,7 @@ def open_tab(customer):
 
 def add_to_tab(drinks, choice, customer):
     print(Fore.GREEN + f"Adding {drinks[choice]} to tab!" + Style. RESET_ALL)
+    Drink_Orders.insert_drink_order(customer.name, customer.id, choice)
     option_select(customer)
 
 #shows option to close tab, change later to show up if drinks are added to tab
