@@ -59,22 +59,28 @@ def option_select(customer):
         print("1. Can I get a drink?")
     else:
         print("Nope, no more")
+
+    print("2. View Open Tabs")
+
     if tab_open:
-        print(Fore.RED + "2. Close Your Tab" + Style.RESET_ALL)
+        print(Fore.RED + "3. Close Your Tab" + Style.RESET_ALL)
         print(Fore.CYAN + "\nhint: to leave, close your tab" + Style.RESET_ALL)
     else:
-        print(Fore.RED + "2. Leave" + Style.RESET_ALL)
+        print(Fore.RED + "3. Leave" + Style.RESET_ALL)
 
     if count <= 6:
-        choice = get_valid_choice(["1", "2"])
+        choice = get_valid_choice(["1", "2", "3"])
     else:
-        choice = get_valid_choice(["2"])
+        choice = get_valid_choice(["2, 3"])
 
     if count <= 6:
         if choice == "1":
             select_drink(customer)
-
+        
     if choice == "2":
+        view_tab(customer)
+    
+    elif choice == "3":
         if (tab_open):
             close_tab(customer)
         else:
@@ -122,6 +128,21 @@ def select_drink(customer):
     else:
         open_tab(customer)
         
+def view_tab(customer):
+    customer_list = customer.get_all()
+    print(Fore.GREEN + "Please select tab Number:" + Style.RESET_ALL)
+    ids = []
+    for i in customer_list:
+        print(f"{i.id}. {i.name}", end=" | ")
+        ids.append(str(i.id))
+    print()
+
+    choice = get_valid_choice(ids)
+    select_tab(choice, customer)
+
+def select_tab(choice, customer):
+    print(choice)
+    option_select(customer)
 
 def open_tab(customer):
     global tab_open
