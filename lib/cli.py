@@ -130,18 +130,19 @@ def select_drink(customer):
         
 def view_tab(customer):
     customer_list = customer.get_all()
-    print(Fore.GREEN + "Please select Tab:" + Style.RESET_ALL)
-    names = []
+    print(Fore.GREEN + "Please select tab Number:" + Style.RESET_ALL)
+    ids = []
     for i in customer_list:
-        print(i.name, end=" | ")
-        names.append(i.name)
+        print(f"{i.id}. {i.name}", end=" | ")
+        ids.append(str(i.id))
     print()
 
-    choice = get_valid_choice(names)
-    select_tab(choice)
+    choice = get_valid_choice(ids)
+    select_tab(choice, customer)
 
-def select_tab(choice):
+def select_tab(choice, customer):
     print(choice)
+    option_select(customer)
 
 def open_tab(customer):
     global tab_open
