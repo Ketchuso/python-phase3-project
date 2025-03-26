@@ -162,15 +162,18 @@ def select_drink(customer):
         option_select(customer)  
     else:
         drink_count += 1
-        drink_index = (choice) - 1  
-        selected_drink = drinks_list[drink_index]
-        print(Fore.GREEN + f"\n{selected_drink.name}, right up!" + Style.RESET_ALL)
+        selected_drink = Drinks.find_by_id(choice)
+        # drink_index = (choice) - 1  
+        # selected_drink = drinks_list[drink_index]
+        if select_drink:
+            print(Fore.GREEN + f"\n{selected_drink.name}, right up!" + Style.RESET_ALL)
         Drink_Orders.create_order(customer.name, customer.id, selected_drink.name, choice)
 
         if tab_open:
-            add_to_tab(drinks_list, drink_index, customer)  
+            add_to_tab(drinks_list, choice - 1, customer)  
         else:
             open_tab(customer)
+
 
 def view_tab(customer):
     customer_list = customer.get_all()
