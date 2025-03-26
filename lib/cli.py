@@ -288,6 +288,19 @@ def add_to_tab(drinks, choice, customer):
     option_select(customer)
 
 #shows option to close tab, change later to show up if drinks are added to tab
+# def close_tab(customer):
+#     global tab_open
+#     print(Style.BRIGHT + Fore.CYAN + "\nAre you sure?:" + Style.RESET_ALL)
+#     print(Fore.RED + "y. yes" + Style.RESET_ALL)
+#     print("n. No")
+
+#     choice = get_valid_choice(["y", "n"])
+#     if choice == "y":
+#         tab_open = False
+#         delete_drink()
+#         leave_bar(customer)
+#     elif choice == "n":
+#         option_select(customer)
 def close_tab(customer):
     global tab_open
     print(Style.BRIGHT + Fore.CYAN + "\nAre you sure?:" + Style.RESET_ALL)
@@ -297,10 +310,12 @@ def close_tab(customer):
     choice = get_valid_choice(["y", "n"])
     if choice == "y":
         tab_open = False
-        delete_drink()
-        leave_bar(customer)
+        print(f"{customer._id} {type(customer._id)}")
+        Drink_Orders.delete_orders(customer.id)  
+        # delete_drink()  
+        leave_bar(customer)  
     elif choice == "n":
-        option_select(customer)
+        option_select(customer)  
 
 #leaving the bar
 def leave_bar(customer):
