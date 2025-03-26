@@ -60,6 +60,10 @@ def seed_db():
         ('Bees Knees',)
     ]
 
+    # drink_orders = {
+    #    {"name": "?", "id": "?"},
+
+    # }
     drink_orders = [
     ('Jay', 1, 'Cosmo', 1)  # Jay ordered Cosmo
    
@@ -91,6 +95,9 @@ def seed_db():
 
 # Run the seed function
 if __name__ == "__main__":
+#     customers = [(str, int),]
+    # drinks = []
+#     drink_orders = [(str, int, str, int)]
     seed_db()
 
 # Close the connection

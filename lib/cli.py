@@ -10,6 +10,11 @@ from models.Customer import Customer
 from models.Drink_Orders import Drink_Orders
 from models.Drinks import Drinks
 import os
+import subprocess
+
+def run_seed():
+    subprocess.run(["python", "lib/models/seed.py"])
+run_seed()
 
 init()
 
@@ -151,15 +156,20 @@ def select_drink(customer):
         print(f"{i + 1}. {drink.name}")  
         ids.append(str(i + 1))  
 
-    print(f"{Fore.RED}{len(drinks_list) + 1}. Go Back {Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}{len(drinks_list) + 1}. Specialty Drink {Style.RESET_ALL}")
     ids.append(str(len(drinks_list) + 1)) 
+
+    print(f"{Fore.RED}{len(drinks_list) + 2}. Go Back {Style.RESET_ALL}")
+    ids.append(str(len(drinks_list) + 2)) 
 
     
     choice = get_valid_choice(ids)
     choice = int(choice) 
     
-    if choice == (len(drinks_list) + 1):
+    if choice == (len(drinks_list) + 2):
         option_select(customer)  
+    elif choice == (len(drinks_list) + 1):
+        create_specialty_drink(customer)
     else:
         drink_count += 1
         selected_drink = Drinks.find_by_id(choice)
@@ -173,6 +183,30 @@ def select_drink(customer):
             add_to_tab(drinks_list, choice - 1, customer)  
         else:
             open_tab(customer)
+
+def create_specialty_drink(customer):
+    print(Fore.CYAN + "Enter the name for your specialty drink:" + Style.RESET_ALL)
+    drink_name = input("> ").strip()
+
+    if not drink_name:
+        print(Fore.RED + "You must enter a drink name!" + Style.RESET_ALL)
+        return
+
+    # Create a new specialty drink and save it to the database
+    try:
+        new_drink = Drinks.create(drink_name)  
+        print(Fore.GREEN + f"Your specialty drink '{new_drink.name}' has been created and added!" + Style.RESET_ALL)
+    # Optionally, you could add this drink to the tab right away, or return it for later
+        Drink_Orders.create_order(customer.name, customer.id, new_drink.name, new_drink._id)
+        if tab_open:
+            add_to_tab([new_drink], 0, customer)  
+        else:
+            open_tab(customer)
+    
+    except Exception as e:
+        print(Fore.RED + f"Error creating the drink: {e}" + Style.RESET_ALL)
+
+    option_select(customer)
 
 
 def view_tab(customer):
