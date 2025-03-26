@@ -297,13 +297,10 @@ def add_to_tab(drinks, choice, customer):
 #     choice = get_valid_choice(["y", "n"])
 #     if choice == "y":
 #         tab_open = False
-#         drink_orders = Drink_Orders.find_by_customer(customer.id)
-#         for order in drink_orders:
-#             Drink_Orders.delete_order(order[3])
+#         delete_drink()
 #         leave_bar(customer)
 #     elif choice == "n":
 #         option_select(customer)
-
 def close_tab(customer):
     global tab_open
     print(Style.BRIGHT + Fore.CYAN + "\nAre you sure?:" + Style.RESET_ALL)
@@ -314,22 +311,12 @@ def close_tab(customer):
     if choice == "y":
         # Close the tab
         tab_open = False
-        
-        # Delete all drink orders associated with this customer
-        drink_orders = Drink_Orders.find_by_customer(customer.id)
-        if drink_orders:
-            for order in drink_orders:
-                # Deleting each drink order by passing customer_id and drink_id
-                Drink_Orders.delete_order(customer.id, order[3])  # Assuming drink_id is at index 3 in the returned tuple
-            
-            print(Fore.GREEN + f"All orders for {customer.name} have been deleted." + Style.RESET_ALL)
-        else:
-            print(Fore.YELLOW + "No drink orders found for this customer." + Style.RESET_ALL)
-        
-        # Close the customer's tab and leave the bar
-        leave_bar(customer)
+        print(f"{customer._id} {type(customer._id)}")
+        Drink_Orders.delete_orders(customer.id)  
+        # delete_drink()  
+        leave_bar(customer)  
     elif choice == "n":
-        option_select(customer)
+        option_select(customer)  
 
 
 #leaving the bar
