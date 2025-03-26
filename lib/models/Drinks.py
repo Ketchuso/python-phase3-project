@@ -5,19 +5,9 @@ import ipdb
 class Drinks():
     age_requirement = 21
 
-    def __init__(self, name):
-        # self.id = id
+    def __init__(self, name, id=None):
+        self._id = id
         self.name = name
-    
-    @property
-    def id(self):
-        return self._id
-    
-    @id.setter
-    def id(self, value):
-        if not isinstance(value, int):
-            raise TypeError("ID has to be an int")
-        self._id = value
     
     @property
     def name(self):
@@ -38,7 +28,7 @@ class Drinks():
         CURSOR.execute(sql, (self.name))
         CONN.commit()
     
-        self.id = CURSOR.lastrowid
+        self._id = CURSOR.lastrowid
 
     def update(self):
         sql = """
@@ -57,14 +47,14 @@ class Drinks():
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        self.id = None
+        self._id = None
 
     @classmethod
     def instance_from_row(cls, row):
         return cls(name=row[1], id=row[0])
 
     @classmethod
-    def all(cls):
+    def get_all(cls):
         sql = """
             SELECT * FROM drinks;
         """
@@ -120,5 +110,5 @@ class Drinks():
         CONN.commit()
 
     def __repr__(self):
-        return f'<drinks id={self.id} name={self.name} >'
+        return f'<drinks id={self._id} name={self.name} >'
         
