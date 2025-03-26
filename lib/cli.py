@@ -156,6 +156,8 @@ def select_drink(customer):
         print(f"{i + 1}. {drink.name}")  
         ids.append(str(i + 1))  
 
+    copy_of_ids = ids.copy()
+
     print(f"{Fore.YELLOW}{len(drinks_list) + 1}. Specialty Drink {Style.RESET_ALL}")
     ids.append(str(len(drinks_list) + 1)) 
 
@@ -172,7 +174,7 @@ def select_drink(customer):
     if choice == (len(drinks_list) + 3):
         option_select(customer)  
     elif choice == (len(drinks_list) + 2):
-        delete_drink(customer)
+        delete_drink(customer, copy_of_ids)
     elif choice == (len(drinks_list) + 1):
         create_specialty_drink(customer)
     else:
@@ -215,8 +217,20 @@ def create_specialty_drink(customer):
 
     option_select(customer)
 
-def delete_drink(customer):
-    print(Fore.RED + "What drink would you like to remove:" + Style.RESET_ALL)
+def delete_drink(customer, copy_of_ids):
+    print(Fore.RED + "Enter number of drink to delete or go back" + Style.RESET_ALL)
+
+    back_option = str(len(copy_of_ids) + 3)
+    copy_of_ids.append(back_option)
+    choice = get_valid_choice(copy_of_ids)
+    
+    if choice == back_option:
+        select_drink(customer)
+    else:
+        drink = Drinks.find_by_id(choice)
+        drink.delete()
+        option_select(customer)
+
 
 def view_tab(customer):
     customer_list = customer.get_all()
