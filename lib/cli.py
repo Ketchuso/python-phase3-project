@@ -54,7 +54,7 @@ def option_select(customer):
     global drink_count
     global birthday
     emotion_state()
-    if drink_count <= 6:
+    if drink_count < 6:
         print("1. Can I get a drink?")
     else:
         print("Nope, no more")
@@ -75,14 +75,14 @@ def option_select(customer):
         else:
             print(Fore.RED + "3. Leave" + Style.RESET_ALL)
 
-    if drink_count <= 6:
+    if drink_count < 6:
         choice = get_valid_choice(["1", "2", "3", "4"])
     elif birthday:
         choice = get_valid_choice(["2", "3", "4"])
     else:
         choice = get_valid_choice(["2", "3", "4"])
 
-    if drink_count <= 6:
+    if drink_count < 6:
         if choice == "1":
             select_drink(customer)
         
