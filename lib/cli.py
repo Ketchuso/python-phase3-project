@@ -156,18 +156,25 @@ def select_drink(customer):
         print(f"{i + 1}. {drink.name}")  
         ids.append(str(i + 1))  
 
+    copy_of_ids = ids.copy()
+
     print(f"{Fore.YELLOW}{len(drinks_list) + 1}. Specialty Drink {Style.RESET_ALL}")
     ids.append(str(len(drinks_list) + 1)) 
 
-    print(f"{Fore.RED}{len(drinks_list) + 2}. Go Back {Style.RESET_ALL}")
+    print(f"{Fore.RED}{len(drinks_list) + 2}. Delete Drink {Style.RESET_ALL}")
     ids.append(str(len(drinks_list) + 2)) 
+
+    print(f"{Fore.RED}{len(drinks_list) + 3}. Go Back {Style.RESET_ALL}")
+    ids.append(str(len(drinks_list) + 3)) 
 
     
     choice = get_valid_choice(ids)
     choice = int(choice) 
     
-    if choice == (len(drinks_list) + 2):
+    if choice == (len(drinks_list) + 3):
         option_select(customer)  
+    elif choice == (len(drinks_list) + 2):
+        delete_drink(customer, copy_of_ids)
     elif choice == (len(drinks_list) + 1):
         create_specialty_drink(customer)
     else:
@@ -199,14 +206,30 @@ def create_specialty_drink(customer):
     # Optionally, you could add this drink to the tab right away, or return it for later
         Drink_Orders.create_order(customer.name, customer.id, new_drink.name, new_drink._id)
         if tab_open:
-            add_to_tab([new_drink], 0, customer)  
+            add_to_tab([new_drink], 0, customer) 
+            delete_drink(new_drink)
         else:
             open_tab(customer)
+
     
     except Exception as e:
         print(Fore.RED + f"Error creating the drink: {e}" + Style.RESET_ALL)
 
     option_select(customer)
+
+def delete_drink(customer, copy_of_ids):
+    print(Fore.RED + "Enter number of drink to delete or go back" + Style.RESET_ALL)
+
+    back_option = str(len(copy_of_ids) + 3)
+    copy_of_ids.append(back_option)
+    choice = get_valid_choice(copy_of_ids)
+    
+    if choice == back_option:
+        select_drink(customer)
+    else:
+        drink = Drinks.find_by_id(choice)
+        drink.delete()
+        option_select(customer)
 
 
 def view_tab(customer):
@@ -274,6 +297,7 @@ def close_tab(customer):
     choice = get_valid_choice(["y", "n"])
     if choice == "y":
         tab_open = False
+        delete_drink()
         leave_bar(customer)
     elif choice == "n":
         option_select(customer)

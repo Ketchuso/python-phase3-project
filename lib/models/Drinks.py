@@ -47,7 +47,9 @@ class Drinks():
             WHERE id = ?;
         """
 
-        CURSOR.execute(sql, (self.id,))
+        print("I was called")
+
+        CURSOR.execute(sql, (self._id,))
         CONN.commit()
         self._id = None
 
