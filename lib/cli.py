@@ -309,6 +309,7 @@ def close_tab(customer):
 
     choice = get_valid_choice(["y", "n"])
     if choice == "y":
+        # Close the tab
         tab_open = False
         print(f"{customer._id} {type(customer._id)}")
         Drink_Orders.delete_orders(customer.id)  
@@ -316,6 +317,7 @@ def close_tab(customer):
         leave_bar(customer)  
     elif choice == "n":
         option_select(customer)  
+
 
 #leaving the bar
 def leave_bar(customer):
