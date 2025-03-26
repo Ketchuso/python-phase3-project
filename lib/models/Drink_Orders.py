@@ -36,14 +36,10 @@ class Drink_Orders:
             print(f"Order for {customer_name} - {drink_name} added to the database.")
     
     @classmethod
-    def delete_order(cls, customer_id, drink_id):
-        # Delete the specific drink order
-        CURSOR.execute('''
-            DELETE FROM drink_orders
-            WHERE customer_id = ? AND drink_id = ?
-        ''', (customer_id, drink_id))
+    def delete_orders(cls, customer_id):
+        sql = "DELETE FROM drink_orders WHERE customer_id = ?"
+        CURSOR.execute(sql, (customer_id,))
         CONN.commit()
-        print(f"Order for drink {drink_id} deleted for customer {customer_id}.")
 
     @classmethod
     def find_by_customer(cls, customer_id):
