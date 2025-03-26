@@ -55,11 +55,6 @@ def option_select(customer):
     global birthday
     emotion_state()
     if drink_count <= 6:
-        print(Style.BRIGHT + Fore.CYAN + "Options" + Style.RESET_ALL)
-    else:
-        print(Style.BRIGHT + Fore.CYAN + "\nCut Off" + Style.RESET_ALL)
-    #change later to only show if tab is open
-    if drink_count <= 6:
         print("1. Can I get a drink?")
     else:
         print("Nope, no more")
@@ -79,16 +74,13 @@ def option_select(customer):
             print(Fore.RED + "4. Leave" + Style.RESET_ALL)
         else:
             print(Fore.RED + "3. Leave" + Style.RESET_ALL)
-    
-    if drink_count <= 6 and not birthday:
-        choice = get_valid_choice(["1", "2", "3", "4"])
-    elif not birthday:
-        choice = get_valid_choice(["2", "3", "4"])
 
-    if drink_count <= 6 and birthday:
-        choice = get_valid_choice(["1", "2", "3"])
+    if drink_count <= 6:
+        choice = get_valid_choice(["1", "2", "3", "4"])
     elif birthday:
-        choice = get_valid_choice(["2", "3"])
+        choice = get_valid_choice(["2", "3", "4"])
+    else:
+        choice = get_valid_choice(["2", "3", "4"])
 
     if drink_count <= 6:
         if choice == "1":
@@ -96,14 +88,15 @@ def option_select(customer):
         
     if choice == "2":
         view_tab(customer)
-    elif choice == "3" and birthday:
-        if (tab_open):
+    if choice == "3" and not birthday:
+        update_birthday(customer)
+    
+    if choice == "3" and birthday:
+        if tab_open:
             close_tab(customer)
         else:
             leave(customer)
 
-    elif choice == "3":
-        update_birthday(customer)
     elif choice == "4" and not birthday:
         if (tab_open):
             close_tab(customer)
@@ -171,7 +164,7 @@ def select_drink(customer):
         drink_count += 1
         drink_index = (choice) - 1  
         selected_drink = drinks_list[drink_index]
-        print(Fore.GREEN + f"\n{selected_drink}, right up!" + Style.RESET_ALL)
+        print(Fore.GREEN + f"\n{selected_drink.name}, right up!" + Style.RESET_ALL)
         Drink_Orders.create_order(customer.name, customer.id, selected_drink.name, choice)
 
         if tab_open:
@@ -195,11 +188,21 @@ def select_tab(choice, customer):
     customer = Customer.find_by_id(choice)
     if customer:
         customer_drinks = Drink_Orders.find_by_customer(customer.id)
-        print(customer_drinks)
+        if customer_drinks:
+            print(Style.BRIGHT + Fore.CYAN + f"Tab for {customer.name}:" + Style.RESET_ALL)
+            for drink_order in customer_drinks:
+                customer_name = drink_order[0]
+                drink_name = drink_order[2]
+                quantity = drink_order[4]
+                print(f"{customer_name} has ordered {quantity} {drink_name}")
+        else:
+            print(Fore.RED + "No tab open" + Style.RESET_ALL)
     else:
-        print("Customer not found.")
+        print(Fore.RED + "Customer not found." + Style.RESET_ALL)
+
+    # Don't allow ordering new drinks, just show tab details
     print(Fore.CYAN + "\nPress enter to continue" + Style.RESET_ALL)
-    user_input = input()
+    input()
     option_select(customer)
 
 
@@ -214,14 +217,14 @@ def open_tab(customer):
         print(Fore.GREEN + "Opening tab!" + Style.RESET_ALL)
         tab_open = True
     elif choice == "n":
-        print(Fore.GREEN + "Here's your total: total" + Style.RESET_ALL)
+        print(Fore.GREEN + "Here's your total: $$$" + Style.RESET_ALL)
     
     print(Fore.CYAN + "\nPress enter to continue" + Style.RESET_ALL)
     user_input = input()
     option_select(customer)
 
 def add_to_tab(drinks, choice, customer):
-    print(Fore.GREEN + f"Adding {drinks[choice]} to tab!" + Style. RESET_ALL)
+    print(Fore.GREEN + f"Adding {drinks[choice].name} to tab!" + Style. RESET_ALL)
     option_select(customer)
 
 #shows option to close tab, change later to show up if drinks are added to tab
