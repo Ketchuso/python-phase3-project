@@ -17,6 +17,8 @@ class Drinks():
     def name(self, value):
         if not isinstance(value, str):
             raise TypeError("Name has to be a string")
+        # if not (1 <= len(value) <= 15): 
+        #     raise ValueError("Name has to be from 1-15 characters")
         self._name = value
 
     def save(self):
@@ -25,7 +27,7 @@ class Drinks():
             VALUES (?);
         """
         
-        CURSOR.execute(sql, (self.name))
+        CURSOR.execute(sql, (self.name,))
         CONN.commit()
     
         self._id = CURSOR.lastrowid
