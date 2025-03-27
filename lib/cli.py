@@ -180,8 +180,6 @@ def select_drink(customer):
     else:
         drink_count += 1
         selected_drink = Drinks.find_by_id(choice)
-        # drink_index = (choice) - 1  
-        # selected_drink = drinks_list[drink_index]
         if select_drink:
             print(Fore.GREEN + f"\n{selected_drink.name}, right up!" + Style.RESET_ALL)
         Drink_Orders.create_order(customer.name, customer.id, selected_drink.name, choice)
@@ -287,20 +285,6 @@ def add_to_tab(drinks, choice, customer):
     print(Fore.GREEN + f"Adding {drinks[choice].name} to tab!" + Style. RESET_ALL)
     option_select(customer)
 
-#shows option to close tab, change later to show up if drinks are added to tab
-# def close_tab(customer):
-#     global tab_open
-#     print(Style.BRIGHT + Fore.CYAN + "\nAre you sure?:" + Style.RESET_ALL)
-#     print(Fore.RED + "y. yes" + Style.RESET_ALL)
-#     print("n. No")
-
-#     choice = get_valid_choice(["y", "n"])
-#     if choice == "y":
-#         tab_open = False
-#         delete_drink()
-#         leave_bar(customer)
-#     elif choice == "n":
-#         option_select(customer)
 def close_tab(customer):
     global tab_open
     print(Style.BRIGHT + Fore.CYAN + "\nAre you sure?:" + Style.RESET_ALL)
@@ -311,9 +295,7 @@ def close_tab(customer):
     if choice == "y":
         # Close the tab
         tab_open = False
-        print(f"{customer._id} {type(customer._id)}")
         Drink_Orders.delete_orders(customer.id)  
-        # delete_drink()  
         leave_bar(customer)  
     elif choice == "n":
         option_select(customer)  

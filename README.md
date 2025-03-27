@@ -32,6 +32,10 @@ To get started, first clone the repository:
 
 Make sure you have Python installed (version 3.7 or above).
 
+Before starting the application to access Colorama:
+
+- pipenv install colorama
+
 To start the application, open your terminal and run the following command:
 
 - python lib/cli.py
